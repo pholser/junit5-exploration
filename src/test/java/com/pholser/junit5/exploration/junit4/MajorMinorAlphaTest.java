@@ -1,38 +1,46 @@
-package com.pholser.junit5.exploration.junit3;
+package com.pholser.junit5.exploration.junit4;
 
 import com.pholser.junit5.exploration.VersionIndicator;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Optional;
 
-public class MajorMinorAlphaTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.rules.ExpectedException.none;
+
+public class MajorMinorAlphaTest {
+    @Rule public final ExpectedException thrown = none();
+
     private VersionIndicator version;
 
-    @Override public void setUp() {
+    @Before public void init() {
         version = new VersionIndicator("3.55-alpha-2");
     }
 
-    public void testMajor() {
+    @Test public void major() {
         assertEquals(3, version.major());
     }
 
-    public void testMinor() {
+    @Test public void minor() {
         assertEquals(55, version.minor());
     }
 
-    public void testPatch() {
+    @Test public void patch() {
         assertEquals(Optional.empty(), version.patch());
     }
 
-    public void testPreviewLevel() {
+    @Test public void previewLevel() {
         assertEquals(Optional.of("alpha"), version.previewLevel());
     }
 
-    public void testPreviewNumber() {
+    @Test public void previewNumber() {
         assertEquals(Optional.of(2), version.previewNumber());
     }
 
-    public void testPromotePreviewNumber() {
+    @Test public void promotePreviewNumber() {
         VersionIndicator promoted = version.promotePreviewNumber();
 
         assertEquals(version.major(), promoted.major());
@@ -44,7 +52,7 @@ public class MajorMinorAlphaTest extends TestCase {
             promoted.previewNumber());
     }
 
-    public void testPromotePreview() {
+    @Test public void promotePreview() {
         VersionIndicator promoted = version.promotePreview();
 
         assertEquals(version.major(), promoted.major());
@@ -54,19 +62,15 @@ public class MajorMinorAlphaTest extends TestCase {
         assertEquals(Optional.of(1), promoted.previewNumber());
     }
 
-    public void testPromotePatch() {
-        try {
-            version.promotePatch();
-            fail();
-        } catch (IllegalStateException expected) {
-            assertEquals(
-                "Version indicator 3.55-alpha-2 is not a patch version",
-                expected.getMessage()
-            );
-        }
+    @Test public void promotePatch() {
+        thrown.expect(IllegalStateException.class);
+        thrown.expectMessage(
+            "Version indicator 3.55-alpha-2 is not a patch version");
+
+        version.promotePatch();
     }
 
-    public void testPromoteMinor() {
+    @Test public void promoteMinor() {
         VersionIndicator promoted = version.promoteMinor();
 
         assertEquals(version.major(), promoted.major());
@@ -76,7 +80,7 @@ public class MajorMinorAlphaTest extends TestCase {
         assertEquals(Optional.empty(), promoted.previewNumber());
     }
 
-    public void testPromoteMajor() {
+    @Test public void promoteMajor() {
         VersionIndicator promoted = version.promoteMajor();
 
         assertEquals(version.major() + 1, promoted.major());

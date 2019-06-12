@@ -1,38 +1,41 @@
-package com.pholser.junit5.exploration.junit3;
+package com.pholser.junit5.exploration.junit4;
 
 import com.pholser.junit5.exploration.VersionIndicator;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Optional;
 
-public class MajorMinorPatchBetaTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class MajorMinorPatchBetaTest {
     private VersionIndicator version;
 
-    @Override public void setUp() {
+    @Before public void init() {
         version = new VersionIndicator("1.2.3-beta-4");
     }
 
-    public void testMajor() {
+    @Test public void major() {
         assertEquals(1, version.major());
     }
 
-    public void testMinor() {
+    @Test public void minor() {
         assertEquals(2, version.minor());
     }
 
-    public void testPatch() {
+    @Test public void patch() {
         assertEquals(Optional.of(3), version.patch());
     }
 
-    public void testPreviewLevel() {
+    @Test public void previewLevel() {
         assertEquals(Optional.of("beta"), version.previewLevel());
     }
 
-    public void testPreviewNumber() {
+    @Test public void previewNumber() {
         assertEquals(Optional.of(4), version.previewNumber());
     }
 
-    public void testPromotePreviewNumber() {
+    @Test public void promotePreviewNumber() {
         VersionIndicator promoted = version.promotePreviewNumber();
 
         assertEquals(version.major(), promoted.major());
@@ -44,7 +47,7 @@ public class MajorMinorPatchBetaTest extends TestCase {
             promoted.previewNumber());
     }
 
-    public void testPromotePreview() {
+    @Test public void promotePreview() {
         VersionIndicator promoted = version.promotePreview();
 
         assertEquals(version.major(), promoted.major());
@@ -56,7 +59,7 @@ public class MajorMinorPatchBetaTest extends TestCase {
         assertEquals(Optional.empty(), promoted.previewNumber());
     }
 
-    public void testPromotePatch() {
+    @Test public void promotePatch() {
         VersionIndicator promoted = version.promotePatch();
 
         assertEquals(version.major(), promoted.major());
@@ -68,7 +71,7 @@ public class MajorMinorPatchBetaTest extends TestCase {
         assertEquals(Optional.empty(), promoted.previewNumber());
     }
 
-    public void testPromoteMinor() {
+    @Test public void promoteMinor() {
         VersionIndicator promoted = version.promoteMinor();
 
         assertEquals(version.major(), promoted.major());
@@ -78,7 +81,7 @@ public class MajorMinorPatchBetaTest extends TestCase {
         assertEquals(Optional.empty(), promoted.previewNumber());
     }
 
-    public void testPromoteMajor() {
+    @Test public void promoteMajor() {
         VersionIndicator promoted = version.promoteMajor();
 
         assertEquals(version.major() + 1, promoted.major());

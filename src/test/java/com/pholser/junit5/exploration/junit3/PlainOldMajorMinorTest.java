@@ -1,5 +1,6 @@
 package com.pholser.junit5.exploration.junit3;
 
+import com.pholser.junit5.exploration.VersionIndicator;
 import junit.framework.TestCase;
 
 import java.util.Optional;

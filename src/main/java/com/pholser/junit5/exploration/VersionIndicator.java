@@ -1,9 +1,9 @@
-package com.pholser.junit5.exploration.junit3;
+package com.pholser.junit5.exploration;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-class VersionIndicator {
+public class VersionIndicator {
     private static final Pattern PATTERN =
         Pattern.compile(
             "(\\d+)\\.(\\d+)(?:(?:\\.(\\d+))?-(?:(alpha|beta)-(\\d+)))?");
@@ -14,7 +14,7 @@ class VersionIndicator {
     private final String previewLevel;
     private final Integer previewNumber;
 
-    VersionIndicator(String raw) {
+    public VersionIndicator(String raw) {
         var matcher = PATTERN.matcher(raw);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
@@ -48,27 +48,27 @@ class VersionIndicator {
         this.previewNumber = previewNumber;
     }
 
-    int major() {
+    public int major() {
         return major;
     }
 
-    int minor() {
+    public int minor() {
         return minor;
     }
 
-    Optional<Integer> patch() {
+    public Optional<Integer> patch() {
         return Optional.ofNullable(patch);
     }
 
-    Optional<String> previewLevel() {
+    public Optional<String> previewLevel() {
         return Optional.ofNullable(previewLevel);
     }
 
-    Optional<Integer> previewNumber() {
+    public Optional<Integer> previewNumber() {
         return Optional.ofNullable(previewNumber);
     }
 
-    VersionIndicator promotePreviewNumber() {
+    public VersionIndicator promotePreviewNumber() {
         if (previewNumber == null) {
             throw new IllegalStateException(
                 "Version indicator " + this + " is not a preview version");
@@ -82,7 +82,7 @@ class VersionIndicator {
             previewNumber + 1);
     }
 
-    VersionIndicator promotePreview() {
+    public VersionIndicator promotePreview() {
         if (previewLevel == null) {
             throw new IllegalStateException(
                 "Version indicator " + this + " is not a preview version");
@@ -114,7 +114,7 @@ class VersionIndicator {
             null);
     }
 
-    VersionIndicator promotePatch() {
+    public VersionIndicator promotePatch() {
         if (patch == null) {
             throw new IllegalStateException(
                 "Version indicator " + this + " is not a patch version");
@@ -128,7 +128,7 @@ class VersionIndicator {
             null);
     }
 
-    VersionIndicator promoteMinor() {
+    public VersionIndicator promoteMinor() {
         return new VersionIndicator(
             major,
             minor + 1,
@@ -137,7 +137,7 @@ class VersionIndicator {
             null);
     }
 
-    VersionIndicator promoteMajor() {
+    public VersionIndicator promoteMajor() {
         return new VersionIndicator(
             major + 1,
             0,
