@@ -34,7 +34,7 @@ public class VersionIndicator {
                 : Integer.parseInt(matcher.group(5));
     }
 
-    private VersionIndicator(
+    public VersionIndicator(
         int major,
         int minor,
         Integer patch,
