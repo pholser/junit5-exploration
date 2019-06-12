@@ -4,51 +4,44 @@ import com.pholser.junit5.exploration.VersionIndicator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import java.util.Arrays;
 
 import static org.junit.rules.ExpectedException.none;
 
+@RunWith(Parameterized.class)
 public class IllFormattedVersionsTest {
+    @Parameters
+    public static Iterable<Object[]> data() {
+        return Arrays.asList(
+            new Object[][] {
+                { "ASJDKASJD(!@*UEP(!@*UEOIASC:KN", "utter garbage" },
+                { "A.1", "non-numeric major" },
+                { "1.X", "non-numeric minor" },
+                { "1.2.Y", "non-numeric patch" },
+                { "1.2.3-epsilon-4", "unrecognized preview level" },
+                { "1.2.3-beta-*", "non-numeric preview number" },
+                { "1.2.3-beta", "preview indicator with missing preview number" }
+            }
+        );
+    }
+
     @Rule public final ExpectedException thrown = none();
 
-    @Test public void utterGarbage() {
-        thrown.expect(IllegalArgumentException.class);
+    private String input;
+    private String reason;
 
-        new VersionIndicator("ASJDKASJD(!@*UEP(!@*UEOIASC:KN");
+    public IllFormattedVersionsTest(String input, String reason) {
+        this.input = input;
+        this.reason = reason;
     }
 
-    @Test public void nonNumericMajor() {
+    @Test public void tryAFailingCase() {
         thrown.expect(IllegalArgumentException.class);
 
-        new VersionIndicator("A.1");
-    }
-
-    @Test public void nonNumericMinor() {
-        thrown.expect(IllegalArgumentException.class);
-
-        new VersionIndicator("1.X");
-    }
-
-    @Test public void nonNumericPatch() {
-        thrown.expect(IllegalArgumentException.class);
-
-        new VersionIndicator("1.2.Y");
-    }
-
-    @Test public void unrecognizedPreviewLevel() {
-        thrown.expect(IllegalArgumentException.class);
-
-        new VersionIndicator("1.2.3-epsilon-4");
-    }
-
-    @Test public void nonNumericPreviewNumber() {
-        thrown.expect(IllegalArgumentException.class);
-
-        new VersionIndicator("1.2.3-beta-*");
-    }
-
-    @Test public void previewIndicatorWithMissingPreviewNumber() {
-        thrown.expect(IllegalArgumentException.class);
-
-        new VersionIndicator("1.2.3-beta");
+        new VersionIndicator(input);
     }
 }
