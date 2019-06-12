@@ -2,13 +2,18 @@ package com.pholser.junit5.exploration.junit5;
 
 import com.pholser.junit5.exploration.VersionIndicator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlainOldMajorMinorTest {
+@DisplayNameGeneration(DisplayNameGenerator.class)
+class PlainOldMajorMinorTest
+    implements PromoteMajorContract, PromoteMinorContract {
+
     private VersionIndicator version;
 
     @BeforeEach void init() {
@@ -68,27 +73,7 @@ class PlainOldMajorMinorTest {
             thrown.getMessage());
     }
 
-    @Test void promoteMinor() {
-        VersionIndicator promoted = version.promoteMinor();
-
-        assertAll(
-            () -> assertEquals(version.major(), promoted.major()),
-            () -> assertEquals(version.minor() + 1, promoted.minor()),
-            () -> assertEquals(Optional.empty(), promoted.patch()),
-            () -> assertEquals(Optional.empty(), promoted.previewLevel()),
-            () -> assertEquals(Optional.empty(), promoted.previewNumber())
-        );
-    }
-
-    @Test void promoteMajor() {
-        VersionIndicator promoted = version.promoteMajor();
-
-        assertAll(
-            () -> assertEquals(version.major() + 1, promoted.major()),
-            () -> assertEquals(0, promoted.minor()),
-            () -> assertEquals(Optional.empty(), promoted.patch()),
-            () -> assertEquals(Optional.empty(), promoted.previewLevel()),
-            () -> assertEquals(Optional.empty(), promoted.previewNumber())
-        );
+    @Override public VersionIndicator indicator() {
+        return version;
     }
 }

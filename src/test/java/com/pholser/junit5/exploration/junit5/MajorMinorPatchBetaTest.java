@@ -9,7 +9,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MajorMinorPatchBetaTest {
+class MajorMinorPatchBetaTest
+    implements PromoteMajorContract, PromoteMinorContract {
+
     private VersionIndicator version;
 
     @BeforeEach void init() {
@@ -78,27 +80,7 @@ class MajorMinorPatchBetaTest {
         );
     }
 
-    @Test void promoteMinor() {
-        VersionIndicator promoted = version.promoteMinor();
-
-        assertAll(
-            () -> assertEquals(version.major(), promoted.major()),
-            () -> assertEquals(version.minor() + 1, promoted.minor()),
-            () -> assertEquals(Optional.empty(), promoted.patch()),
-            () -> assertEquals(Optional.empty(), promoted.previewLevel()),
-            () -> assertEquals(Optional.empty(), promoted.previewNumber())
-        );
-    }
-
-    @Test void promoteMajor() {
-        VersionIndicator promoted = version.promoteMajor();
-
-        assertAll(
-            () -> assertEquals(version.major() + 1, promoted.major()),
-            () -> assertEquals(0, promoted.minor()),
-            () -> assertEquals(Optional.empty(), promoted.patch()),
-            () -> assertEquals(Optional.empty(), promoted.previewLevel()),
-            () -> assertEquals(Optional.empty(), promoted.previewNumber())
-        );
+    @Override public VersionIndicator indicator() {
+        return version;
     }
 }

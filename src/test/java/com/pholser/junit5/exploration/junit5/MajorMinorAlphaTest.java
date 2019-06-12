@@ -3,6 +3,7 @@ package com.pholser.junit5.exploration.junit5;
 import com.pholser.junit5.exploration.VersionIndicator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 
@@ -12,7 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.condition.OS.MAC;
 
-class MajorMinorAlphaTest {
+@DisplayNameGeneration(JavaCaseToSpacedWords.class)
+class MajorMinorAlphaTest
+    implements PromoteMajorContract, PromoteMinorContract {
+
     private VersionIndicator version;
 
     @BeforeEach void init() {
@@ -76,30 +80,6 @@ class MajorMinorAlphaTest {
             thrown.getMessage());
     }
 
-    @Test void promoteMinor() {
-        VersionIndicator promoted = version.promoteMinor();
-
-        assertAll(
-            () -> assertEquals(version.major(), promoted.major()),
-            () -> assertEquals(version.minor() + 1, promoted.minor()),
-            () -> assertEquals(Optional.empty(), promoted.patch()),
-            () -> assertEquals(Optional.empty(), promoted.previewLevel()),
-            () -> assertEquals(Optional.empty(), promoted.previewNumber())
-        );
-    }
-
-    @Test void promoteMajor() {
-        VersionIndicator promoted = version.promoteMajor();
-
-        assertAll(
-            () -> assertEquals(version.major() + 1, promoted.major()),
-            () -> assertEquals(0, promoted.minor()),
-            () -> assertEquals(Optional.empty(), promoted.patch()),
-            () -> assertEquals(Optional.empty(), promoted.previewLevel()),
-            () -> assertEquals(Optional.empty(), promoted.previewNumber())
-        );
-    }
-
     @Disabled("Not sure")
     @Test
     void someTest() {
@@ -115,5 +95,9 @@ class MajorMinorAlphaTest {
     @EnabledOnOs(MAC)
     @Test void onlyOnMac() {
         assertTrue(true);
+    }
+
+    @Override public VersionIndicator indicator() {
+        return version;
     }
 }
