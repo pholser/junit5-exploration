@@ -23,6 +23,5 @@ public interface PromoteMajorContract {
             () -> assertEquals(Optional.empty(), promoted.previewLevel()),
             () -> assertEquals(Optional.empty(), promoted.previewNumber())
         );
-
     }
 }

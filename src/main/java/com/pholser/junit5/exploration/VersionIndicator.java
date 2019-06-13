@@ -147,7 +147,7 @@ public class VersionIndicator {
     }
 
     @Override public String toString() {
-        StringBuilder buffer = new StringBuilder();
+        var buffer = new StringBuilder();
 
         buffer.append(major).append(".").append(minor);
 

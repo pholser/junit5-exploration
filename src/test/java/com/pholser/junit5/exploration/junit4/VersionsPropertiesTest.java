@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(JUnitQuickcheck.class)
 public class VersionsPropertiesTest {
-    @Property public void promoteMinor(VersionIndicator v) {
+    @Property(trials = 10) public void promoteMinor(VersionIndicator v) {
         VersionIndicator promoted = v.promoteMinor();
 
         assertEquals(v.major(), promoted.major());
